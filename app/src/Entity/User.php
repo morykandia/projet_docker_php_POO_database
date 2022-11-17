@@ -144,6 +144,13 @@ class User extends BaseEntity implements UserInterface, PasswordProtectedInterfa
         return $this;
     }
 
+    public function setHashedPassword($password): User 
+    {
+        $this->password = $password;
+        return $this;
+
+    }
+
     public function getHashedPassword(): string
     {
         return password_hash("$this->password",PASSWORD_DEFAULT);

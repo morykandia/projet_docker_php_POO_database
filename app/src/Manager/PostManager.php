@@ -21,4 +21,18 @@ class PostManager extends BaseManager
 
         return $users;
     }
+
+    public function getPostById($id): array
+    {
+
+        $query = $this->pdo->query("select* from Post where id = $id ");
+
+        $users = [];
+
+        while ($data = $query->fetch(\PDO::FETCH_ASSOC)) {
+            $users[] = new Post($data);
+        }
+
+        return $users;
+    }
 }
