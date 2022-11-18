@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS Post
     id      INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     content TEXT,
     author INT NOT NULL,
-    commentId INT NOT NULL,
+    commentId INT NOT NULL
    
     
 );
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS Comment
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     content TEXT,
     author INT NOT NULL,
-    postId INT NOT NULL,
+    postId INT NOT NULL
     
    
 );

@@ -3,6 +3,7 @@
 namespace App\Manager;
 
 use App\Entity\Post;
+use App\Entity\User;
 
 class PostManager extends BaseManager
 {
@@ -34,5 +35,24 @@ class PostManager extends BaseManager
         }
 
         return $users;
+    }
+
+
+    public function insertPost(Post $post)
+    {
+        $user = new User();
+        if ($user->getId() != 0)
+        {
+             $query = $this->pdo->prepare("INSERT INTO User( content, author ) VALUES ( :content,:author)");
+             $query->bindValue("content", $post->getContent(), \PDO::PARAM_STR);
+             $query->bindValue("author", $post->getAuthor(), \PDO::PARAM_STR);
+             $query->execute();
+             
+
+
+        }
+           
+        
+
     }
 }

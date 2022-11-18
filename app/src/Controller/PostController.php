@@ -19,6 +19,17 @@ class PostController extends AbstractController
         $this->render("home.php", ["posts" => $posts], "Tous les posts");
     }
 
+    #[Route('/insertpost', name: "insertpost",methods: ["GET", "POST"])]
+    public function insertPostController()
+    {
+        //$manger = new PostManager(new PDOFactory());
+       // $post = $manger->
+
+    }
+
+
+
+
     
 
 

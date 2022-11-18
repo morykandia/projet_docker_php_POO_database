@@ -38,11 +38,11 @@ class UserManager extends BaseManager
     }
 
 
-    public function getByUser(string $email, string $password): ?User
+    public function getByUser(string $email): ?User
     {
-        $query = $this->pdo->prepare("SELECT * FROM User WHERE email=:email AND password=:password LIMIT 1");
+        $query = $this->pdo->prepare("SELECT * FROM User WHERE email=:email  LIMIT 1");
         $query->bindValue("email", $email, \PDO::PARAM_STR);
-        $query->bindValue("password", $password, \PDO::PARAM_STR);
+        //$query->bindValue("password", $password, \PDO::PARAM_STR);
         $query->execute();
         $data = $query->fetch(\PDO::FETCH_ASSOC);
 

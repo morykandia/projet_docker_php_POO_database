@@ -54,19 +54,9 @@ class SecurityController extends AbstractController
         $formPwd = $_POST['password'];
 
 
-
-        
-    
-       
-
         $userManager = new UserManager(new PDOFactory());
-        $user = $userManager->getByUser($formEmail,$formPwd);
-        //var_dump( $formPwd );
-       //$user->passwordMatch($formPwd);
-
-       var_dump($user);
-
-        die;
+        $user = $userManager->getByUser($formEmail);
+       
 
         if (!$user) {
             header("Location: /?error=notfound");
@@ -82,7 +72,7 @@ class SecurityController extends AbstractController
                 "titre de la page");
         }
 
-        header("Location: /?error=notfound");
+        header("Location: /?error=nopass");
         exit;
     }
 }
