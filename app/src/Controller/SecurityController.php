@@ -18,10 +18,6 @@ class SecurityController extends AbstractController
             $this->render('contactform.php');
         }
 
-       
-        
-
-
         $htmlUsername = strip_tags($_POST['username']);
         $htmlPassword = strip_tags($_POST['password']);
         $htmlEmail = strip_tags($_POST['email']);
@@ -47,15 +43,30 @@ class SecurityController extends AbstractController
     }
 
 
-    #[Route('/login', name: "login", methods: ["GET"])]
+    #[Route('/login', name: "login", methods: ["GET", "POST"])]
     public function login( )
     {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $this->render('Login.php');
+        }
        
-        $formUsername = $_POST['username'];
+        $formEmail = $_POST['email'];
         $formPwd = $_POST['password'];
 
+
+
+        
+    
+       
+
         $userManager = new UserManager(new PDOFactory());
-        $user = $userManager->getByUsername($formUsername);
+        $user = $userManager->getByUser($formEmail,$formPwd);
+        //var_dump( $formPwd );
+       //$user->passwordMatch($formPwd);
+
+       var_dump($user);
+
+        die;
 
         if (!$user) {
             header("Location: /?error=notfound");
@@ -63,8 +74,9 @@ class SecurityController extends AbstractController
         }
 
         if ($user->passwordMatch($formPwd)) {
+            
 
-            $this->render("user/showUsers.php", [
+            $this->render("showUsers.php", [
                 "message" => "je suis un message"
             ],
                 "titre de la page");
