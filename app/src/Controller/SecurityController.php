@@ -14,7 +14,8 @@ class SecurityController extends AbstractController
     {
 
 
-        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') 
+        {
             $this->render('contactform.php');
         }
 
@@ -74,5 +75,26 @@ class SecurityController extends AbstractController
 
         header("Location: /?error=nopass");
         exit;
+    }
+
+    #[Route('/logout', name: 'logout', methods: ['GET'])]
+    public function logout()
+    {
+        session_destroy();
+        header('location: /');
+        exit;
+    }
+
+    
+    #[Route('/account', name: 'account', methods: ['GET'])]
+    public function account()
+    {
+        $userManager = new UserManager(new PDOFactory());
+
+        if (isset($_SESSION)) {
+            $user = $userManager->getUserbyId($_SESSION['auth']);
+            $this->render('users/showUsers', compact('user'));
+        }
+        header('location: /?error=notfound');
     }
 }

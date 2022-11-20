@@ -2,8 +2,10 @@
 
 namespace App\Manager;
 
+
 use App\Entity\Post;
-use App\Entity\User;
+use App\Entity\Comment;
+
 
 class PostManager extends BaseManager
 {
@@ -23,36 +25,48 @@ class PostManager extends BaseManager
         return $users;
     }
 
-    public function getPostById($id): array
+    public function getPostById(int $id): ?Post
     {
 
-        $query = $this->pdo->query("select* from Post where id = $id ");
+        $query = $this->pdo->prepare("SELECT * FROM Post WHERE Post.id = :id");
+        $query->bindValue('id', $id, \PDO::PARAM_INT);
+        $query->execute();
+        $data = $query->fetch(\PDO::FETCH_ASSOC);
 
-        $users = [];
+        $post = new Post($data);
 
-        while ($data = $query->fetch(\PDO::FETCH_ASSOC)) {
-            $users[] = new Post($data);
+
+        if ($post) {
+            return $post;
         }
-
-        return $users;
+        return null;
     }
-
 
     public function insertPost(Post $post)
     {
-        $user = new User();
-        if ($user->getId() != 0)
-        {
-             $query = $this->pdo->prepare("INSERT INTO User( content, author ) VALUES ( :content,:author)");
-             $query->bindValue("content", $post->getContent(), \PDO::PARAM_STR);
-             $query->bindValue("author", $post->getAuthor(), \PDO::PARAM_STR);
-             $query->execute();
-             
+        $query = $this->pdo->prepare('INSERT INTO Post (title,content,author_id,created_at,img) VALUES (:title,:content,:author_id,:created_at,:img)');
+        $query->bindValue('content', $post->getContent(), \PDO::PARAM_STR);
+        $query->bindValue('author_id', $post->getAuthor(), \PDO::PARAM_INT);
+        $query->execute();
+    }
 
 
-        }
-           
-        
+    public function deletePost(int $id)
+    {
+        $query = $this->pdo->prepare('DELETE FROM Post WHERE id = :id');
+        $query->bindValue('id', $id, \PDO::PARAM_INT);
+        $query->execute();
+    }
 
+
+    public function updatePost(int $id, array $data)
+    {
+        extract($data);
+        $query = $this->pdo->prepare('UPDATE Post SET content = :content,img = :img,title=:title WHERE id = :id');
+        $query->bindValue('id', $id, \PDO::PARAM_INT);
+        $query->bindValue('content', $content, \PDO::PARAM_STR);
+        $query->bindValue('title', $title, \PDO::PARAM_STR);
+        $query->bindValue('img', $img, \PDO::PARAM_STR);
+        $query->execute();
     }
 }
